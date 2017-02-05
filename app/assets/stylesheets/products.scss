@@ -1,0 +1,62 @@
+// Place all the styles related to the products controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+// INDEX
+
+.productContainer {
+    text-align: center;
+    .productLink {
+      text-decoration: none;
+      color: rgba( 60, 40, 80, 0.5 );
+      &:hover {
+        color: rgba( 90, 40, 80, 0.7 );
+      }
+    }
+
+  .productWrapper {
+    border: 1px solid black;
+    width: 200px;
+    margin: 10px auto;
+    display: inline-block;
+
+    .iconWrapper {
+      width: 130px;
+      height: 130px;
+      overflow: hidden;
+      margin: 10px auto;
+      border: 1px solid gainsboro;
+
+        .productIcon {
+          position: relative;
+          min-height: 140px;
+          max-width: 140px;
+          top: -10px;
+        }
+      }
+
+    .productTextWrapper {
+      margin: auto;
+      border: 1px solid rgba(255, 0, 0, 0.2);
+      padding: 0 10px;
+    }
+  }
+}
+
+// SHOW
+
+.container {
+  border: 1px solid black;
+
+  .productImage {
+    float: left;
+  }
+
+  .category {
+    color: rgba( 80, 230, 80, 1 );
+    border: 1px solid rgba( 80, 230, 80, 1 );
+    background-color: rgba( 180, 255, 180, 0.8 );
+    padding: 0 2px;
+  }
+
+}

@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Products</h1>
+  <div class="productContainer">
+    <% @products.each do |product| %>
+      <%= link_to( product, class: "productLink" ) do %>
+        <div class="productWrapper">
+          <div class="iconWrapper">
+            <%= image_tag( product.image_url, class: "productIcon") %>
+          </div>
+          <div class="productTextWrapper">
+            <h3><%= product.name %></h4>
+            <h4>Price: <%= number_to_currency product.price %></h3>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% if @current_user && @current_user.admin? %>
+  <%= link_to 'Create product', new_product_path %>
+<% end %>
