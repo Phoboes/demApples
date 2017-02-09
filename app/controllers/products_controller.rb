@@ -25,6 +25,8 @@ class ProductsController < ApplicationController
   # POST /products.json
   def create
     @product = Product.new(product_params)
+    cloudinary = Cloudinary::Uploader.upload( params[:product]["image_url"] )
+    @product.image_url = cloudinary["url"]
 
     respond_to do |format|
       if @product.save
@@ -56,7 +58,7 @@ class ProductsController < ApplicationController
   def destroy
     @product.destroy
     respond_to do |format|
-      format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
+      format.html { redirect_to products_url, notice: 'Product was successfully removed.' }
       format.json { head :no_content }
     end
   end

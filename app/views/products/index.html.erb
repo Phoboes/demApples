@@ -6,7 +6,9 @@
       <%= link_to( product, class: "productLink" ) do %>
         <div class="productWrapper">
           <div class="iconWrapper">
-            <%= image_tag( product.image_url, class: "productIcon") %>
+            <% if product.image_url != "default" %>
+              <%= image_tag( product.image_url, class: "productIcon") %>
+            <% end %>
           </div>
           <div class="productTextWrapper">
             <h3><%= product.name %></h4>

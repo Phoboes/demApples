@@ -1,5 +1,15 @@
 Rails.application.routes.draw do
 
+  get 'product_images/new'
+
+  get 'product_images/create'
+
+  get 'product_images/edit'
+
+  get 'product_images/update'
+
+  get 'product_images/destroy'
+
   get 'sessions/new'
 
   root 'pages#home'
