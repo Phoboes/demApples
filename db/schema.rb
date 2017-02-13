@@ -35,7 +35,8 @@ ActiveRecord::Schema.define(version: 20170209001213) do
   create_table "product_images", force: :cascade do |t|
     t.integer  "product_id"
     t.text     "public_id"
-    t.text     "url"
+    t.text     "image_url"
+    t.text     "attr_desc"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -43,7 +44,6 @@ ActiveRecord::Schema.define(version: 20170209001213) do
   create_table "products", force: :cascade do |t|
     t.string   "name"
     t.float    "price"
-    t.string   "image_url"
     t.string   "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false

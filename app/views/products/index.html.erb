@@ -1,23 +1,44 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Products</h1>
-  <div class="productContainer">
-    <% @products.each do |product| %>
-      <%= link_to( product, class: "productLink" ) do %>
-        <div class="productWrapper">
-          <div class="iconWrapper">
-            <% if product.image_url != "default" %>
-              <%= image_tag( product.image_url, class: "productIcon") %>
-            <% end %>
+<div class="container">
+  <header>
+    <h1>Products</h1>
+      <%= select_tag :per_page, options_for_select([25,50, 100], params[:per_page].to_i),
+         :onchange =>
+         "if(this.value){
+           window.location='?per_page='+this.value;
+         }"
+       %>
+  </header>
+
+    <div class="productContainer">
+      <% @products.each do |product| %>
+        <%= link_to( product, class: "productLink" ) do %>
+          <div class="productWrapper">
+            <div class="iconWrapper">
+              <% if product.product_images.first.present? %>
+                <%= image_tag( product.product_images.first.image_url, class: "productIcon") %>
+              <% end %>
+            </div>
+            <div class="productTextWrapper">
+                <div class="productName">
+                  <span>
+                    <%= product.name %>
+                  </span>
+                </div>
+                <div class="productPrice">
+                    Price: <%= number_to_currency product.price %>
+                </div>
+            </div>
           </div>
-          <div class="productTextWrapper">
-            <h3><%= product.name %></h4>
-            <h4>Price: <%= number_to_currency product.price %></h3>
-          </div>
-        </div>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
-<% if @current_user && @current_user.admin? %>
-  <%= link_to 'Create product', new_product_path %>
-<% end %>
+    </div>
+  <% if @current_user && @current_user.admin? %>
+    <%= link_to 'Create product', new_product_path %>
+  <% end %>
+</div>
+
+<footer>
+    <%= will_paginate @products %>
+</footer>
