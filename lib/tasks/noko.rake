@@ -1,5 +1,6 @@
 namespace :noko do
   # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+  # Bypass for my windows environment.
   require 'open-uri'
   desc "Strips a collection of apples from a fruit enthusiast site. Sorry, guy."
   task apples: :environment do
@@ -36,7 +37,7 @@ namespace :noko do
 
 
           img_url = page.css(".photopaper img").attr("src").value
-          img_url.slice!(0,3)
+          img_url.slice!(0,3) #strike useless characters from the start of img url: '../' in this case.
 
           img_url = base_url + img_url
 
@@ -50,7 +51,6 @@ namespace :noko do
 
         product = Product.create({
             name: page.css(".varietyname_title").text,
-            # If there is an image, provide the src, or provide the string "default"
             image_url: cloudinary["url"],
             price: rand(0.1..8.0).round(2),
             description: page.css(".variety_subtitle").text
