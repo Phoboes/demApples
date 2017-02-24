@@ -1,0 +1,23 @@
+<p>
+  <strong>User:</strong>
+  <%= @cart.user_id %>
+</p>
+
+<p>
+  <strong>Completed:</strong>
+  <%= @cart.purchase_completed %>
+</p>
+
+<% @cart.cart_items.each do |item| %>
+<div class="cartRow">
+  <p>Item: <%= item.product.name %></p> |
+  <p>Quantity: <%= item.quantity %></p>
+  <p><%= link_to "Add", add_path( item ) %></p>
+  <p><%= link_to "Remove", remove_path( item ) %></p> |
+  <p>Price: <%= number_to_currency ( item.product.price )*item.quantity %></p> |
+  <%= link_to "Delete", item, method: :delete, data: { confirm: "Are you sure?" }  %>
+
+</div>
+<% end %>
+<%= link_to "Clear cart", remove_path %>
+

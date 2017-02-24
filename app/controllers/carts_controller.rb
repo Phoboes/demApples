@@ -1,5 +1,5 @@
 class CartsController < ApplicationController
-  before_action :set_cart, only: [:show, :edit, :update, :destroy]
+  before_action :set_cart, only: [:show, :edit, :update, :destroy, :add_item, :remove_item, :clear_cart]
 
   # GET /carts
   # GET /carts.json
@@ -61,10 +61,34 @@ class CartsController < ApplicationController
     end
   end
 
+    def remove_item
+      @item = CartItem.find( params[:id] )
+      @cart.remove_item @item.product.id
+      render 'show', cart: @cart
+    end
+
+    def add_item
+      @item = CartItem.find( params[:id] )
+      @cart.add_item @item.product.id
+      render 'show', cart: @cart
+    end
+
+    def clear_cart
+      @cart.clear_cart
+      render 'show', cart: @cart
+    end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_cart
-      @cart = Cart.find(params[:id])
+      if @current_user.nil?
+        redirect_to login_path
+      elsif @current_user.carts.nil? || @current_user.carts.last.purchase_completed
+        @cart = Cart.create( user_id: @current_user.id )
+        redirect_to cart_path( @cart )
+      else
+        @cart = @current_user.carts.last
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

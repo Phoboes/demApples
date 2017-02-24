@@ -60,7 +60,7 @@ c2 = Category.new( { name: "political" } )
 
   #--------------------------------------------------------------------
 
-Product.destroy_all
+# Product.destroy_all
 
   p1 = Product.create({
     name: "Granny Smith",
@@ -100,7 +100,7 @@ p3.categories << c1
 
   #--------------------------------------------------------------------
 
-  ProductImage.destroy_all
+  # ProductImage.destroy_all
 
   i1 = ProductImage.create({
     product_id: p1.id,
@@ -138,3 +138,18 @@ p3.categories << c1
   })
 
 p5.categories << c1 << c2
+
+#--------------------------------------------------------------------
+
+Cart.destroy_all
+
+c1 = Cart.create({ user_id: u1.id, purchase_completed: false })
+
+#--------------------------------------------------------------------
+
+CartItem.destroy_all
+
+ci1 = CartItem.create({ product_id: p1.id, cart_id: c1.id, quantity: 1 })
+ci2 = CartItem.create({ product_id: p2.id, cart_id: c1.id, quantity: 2 })
+ci3 = CartItem.create({ product_id: p3.id, cart_id: c1.id, quantity: 5 })
+
