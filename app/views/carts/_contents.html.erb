@@ -23,21 +23,68 @@
 <div class="items"></div>
 <!-- <%# end %> -->
 <%= link_to "Clear cart", clear_path, data: { confirm: 'Are you sure you want to remove all items?' } %>
-
+<%= link_to "Pay now", payment_path( @cart ) %>
 
 </div>
 
 
 <script type="text/javascript">
-  
+
 var cartID = <%= params["id"] %>
+
+var addItem = function( id ){
+  $.ajax({
+    url: "/carts/add_item/" + id ,
+    data: {
+      user_id: <%= @current_user.id %>
+    },
+    dataType: "JSON",
+    method: 'post',
+    async: false,
+    success: function( data ){
+      // debugger
+      // console.log(data)
+      getCart( cartID )
+    }
+  })//.success( getCart( cartID ) );
+}
+
+var removeItem = function( id ){
+  $.ajax({
+    url: "/carts/remove_item/" + id ,
+    data: {
+      user_id: <%= @current_user.id %>
+    },
+    dataType: "JSON",
+    method: 'post',
+    async: false
+  }).success( function( data ){
+    // console.log(data)
+    getCart( cartID )
+  } );
+}
+
+var deleteItem = function( id ){
+  $.ajax({
+    url: "/carts/delete_item/" + id ,
+    data: {
+      user_id: <%= @current_user.id %>
+    },
+    dataType: "JSON",
+    method: 'delete',
+    async: false
+  }).success( function( data ){
+    // console.log(data)
+    getCart( cartID )
+  } );
+}
 
   var getCart = function( id ){
     $.ajax({
       url: "/carts/" + id ,
       dataType: "JSON",
       method: 'get'
-    }).done(function( d ) {
+    }).success(function( d ) {
       // console.log( d );
       renderItems( d );
     });
@@ -47,34 +94,78 @@ getCart( cartID )
 
   var renderItems = function( d ){
     var row = $('<div></div>');
+    $(row).append( '<hr>' );
+    var total = 0;
     d.cart.cartItems.forEach( function( item ){
       console.log( item );
       // debugger
-
-      $(row).append( '<p>Item: ' + item.productName +
-        " | Quantity: " +item.quantity + 
-        " | Price: $" + item.productPrice.toFixed(2) +
-        ' | <a class="cartButton" onClick="getCart(' + cartID + ')" data-remote="true" href="/carts/add_item/' + item.cartProductId + '">Add</a>' +
-        ' | <a class="cartButton" onClick="getCart(' + cartID + ')" data-remote="true" href="/carts/remove_item/' + item.cartProductId + '">Remove</a>' +
-        ' | <a class="cartButton" onClick="getCart(' + cartID + ')" data-remote="true" data-method="delete" rel="nofollow" data-confirm="Are you sure?" href="/carts/delete_item/' + item.cartItemId + '">Delete</a>' +
+      total += item.quantity * item.productPrice;
+      $(row).append(
+        '<p>Item: <span class="itemName" >' + item.productName + "</span>" +
+        " | Quantity: <span class='quantityName' >" +item.quantity + "</span>" +
+        " | Price: <span class='cartPrice' >$" + ( item.quantity * item.productPrice ).toFixed(2) + "</span>" +
+        ' | <a class="cartButton" data-id="' + item.cartProductId + '" href="add_item">Add</a>' +
+        ' | <a class="cartButton" data-id="' + item.cartProductId + '" href="remove_item">Remove</a>' +
+        ' | <a class="cartButton" data-id="' + item.cartItemId + '" href="delete_item">Delete</a>' +
        '</p>' );
     });
     // debugger
+    $(row).append( '<hr>' );
+    $(row).append( '<p>Total: $' + total.toFixed(2) + '</p>');
   $('.items').html(row);
 };
 
-$(document).ready(function(){
-  $('.cartButton').on("click", function(e){
-    debugger
-    console.log( e )
-    console.log("Ping.")
-      getCart( cartID );
-  });
-});
+// $(document).ready(function(){
+//   $('.cartButton').on("click", function(e){
+//     debugger
+//     console.log( e )
+//     console.log("Ping.")
+//       getCart( cartID );
+//   });
+// });
 
-$('.test').on("click", function(){
-  alert();
-})
+// $('.cartButton').on("click", function( e ){
+//   e.preventDefault();
+//   console.log( $( this ).text )
+//   alert();
+// })
+
+// var getVal = function(  ){
+//   // e.preventDefault();
+//   debugger
+//   console.log( $( this ).text() )
+//   alert();
+// }
+
+
+document.querySelector('body').addEventListener('click', function(event) {
+  if (event.target.tagName.toLowerCase() === 'a') {
+    // debugger
+    // event.preventDefault();
+    var $el = $( event.target )
+    // debugger
+    switch( $el.text() ){
+      case "Add":
+        event.preventDefault();
+        addItem( $el.data("id") );
+        break;
+      case "Remove":
+        event.preventDefault();
+        removeItem( $el.data("id") );
+        break;
+      case "Delete":
+        event.preventDefault();
+        if (confirm("Are you sure?") == true) {
+          deleteItem( $el.data("id") );
+          break;
+        } else {
+          return;
+        }
+      default:
+        break;
+    }
+  }
+});
 
 // window.setInterval(function(){
 // }, 1000);
@@ -83,7 +174,3 @@ $('.test').on("click", function(){
 
 
 </script>
-
-
-
-

@@ -15,12 +15,13 @@ Rails.application.routes.draw do
   root 'pages#home'
 
   get 'carts/clear' => 'carts#clear_cart', as: :clear
-  get 'carts/add_item/:id' => 'carts#add_item', as: :add
-  get 'carts/remove_item/:id' => 'carts#remove_item', as: :remove
-  delete 'carts/delete_item/:id' => 'carts#destroy_cart_item', as: :delete
+  post 'carts/add_item/:id' => 'carts#add_item', as: :add
+  post 'carts/remove_item/:id' => 'carts#remove_item', as: :remove
+  delete 'carts/delete_item/:id' => 'carts#destroy_cart_item', as: :delete_item
+  get '/carts/payment/:id' => 'charges#new', as: :payment
 
 
-  resources :products, :carts, :users, :cart_items
+  resources :products, :carts, :users, :cart_items, :charges
 
   # get '/cart_item' => 'cart_items#new'
   # post '/cart_item' => 'cart_items#create'

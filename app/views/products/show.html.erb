@@ -8,7 +8,7 @@
         <h1 class="flow-text"><%= @product.name %></h1>
             <h2 class="flow-text"><%= number_to_currency( @product.price ) %></h2>
 
-            <%= link_to "Add", add_path( @product ), class: "addCart center waves-effect waves-light btn", remote: true %>
+            <%= link_to "Add", "/add_to_cart", class: "addCart center waves-effect waves-light btn" %>
 
 
 
@@ -31,7 +31,27 @@
       <%= link_to 'Edit', edit_product_path(@product) %>
       <%= link_to 'Delete', @product, method: :delete, data: { confirm: 'Are you sure?' } %>
     <% end %>
-    
+
   </div>
 </div>
 
+<script type="text/javascript">
+
+var addItem = function( id ){
+  $.ajax({
+    url: "/carts/add_item/" + id ,
+    data: {
+      user_id: <%= @current_user.id %>
+    },
+    dataType: "JSON",
+    method: 'post',
+    async: false
+  });
+};
+
+$('.addCart').on('click',function( e ){
+  e.preventDefault();
+  addItem( <%= params["id"] %> )
+});
+
+</script>

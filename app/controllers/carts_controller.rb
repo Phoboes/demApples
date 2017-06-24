@@ -82,27 +82,52 @@ class CartsController < ApplicationController
   end
 
   def remove_item
+    # binding.pry
     item = CartItem.find_by( cart_id: @cart.id, product_id: params["id"] )
     @cart.remove_item item.product.id
-    render 'show', cart: @cart
+    # render 'show', cart: @cart
   end
+
+  # def add_item
+  #   # If the user's last cart has completed all transactions, make a new one.
+  #   binding.pry
+  #
+  #   if !@current_user.carts.last.purchase_completed && @current_user.carts.last.present?
+  #     cart = @current_user.carts.last
+  #   else
+  #     cart = Cart.create({ user_id: @current_user.id, purchase_completed: false })
+  #   end
+  #
+  #   if CartItem.find_by( cart_id: cart.id, product_id: params["id"] )
+  #     item = CartItem.find_by( cart_id: cart.id, product_id: params["id"] )
+  #     cart.add_item item.product.id
+  #   else
+  #     item = CartItem.create( cart_id: cart.id, product_id: params["id"], quantity: 1 )
+  #   end
+  #
+  #   render 'show', cart: @cart
+  # end
+
 
   def add_item
     # If the user's last cart has completed all transactions, make a new one.
+
     if !@current_user.carts.last.purchase_completed && @current_user.carts.last.present?
       cart = @current_user.carts.last
     else
       cart = Cart.create({ user_id: @current_user.id, purchase_completed: false })
     end
 
+    # binding.pry
+
     if CartItem.find_by( cart_id: cart.id, product_id: params["id"] )
       item = CartItem.find_by( cart_id: cart.id, product_id: params["id"] )
-      cart.add_item item.product.id
+      cart.add_item item.product.id unless cart.user.id != params["user_id"].to_i
     else
       item = CartItem.create( cart_id: cart.id, product_id: params["id"], quantity: 1 )
     end
 
-    render 'show', cart: @cart
+    # render 'show', cart: @cart
   end
 
   def clear_cart

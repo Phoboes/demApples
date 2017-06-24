@@ -15,7 +15,9 @@ class Cart < ApplicationRecord
   has_many :products, through: :cart_items
 
   def add_item product_id
-    if CartItem.where( cart_id: self.id, product_id: product_id ).exists?
+    # binding.pry
+    if CartItem.find_by( cart_id: self.id, product_id: product_id )
+      # cart_item = CartItem.find_by( cart_id: self.id, product_id: product_id )
       cart_item = CartItem.find_by( cart_id: self.id, product_id: product_id )
       cart_item.quantity += 1
       # binding.pry
@@ -31,23 +33,32 @@ class Cart < ApplicationRecord
   end
 
   def remove_item product_id
-    cart_item = CartItem.find_by( cart_id: self.id, product_id: product_id )
-    if cart_item.quantity > 1 
-      cart_item.quantity -= 1 
-      cart_item.save
+    # binding.pry
+    if CartItem.find_by( cart_id: self.id, product_id: product_id ).present?
+      cart_item = CartItem.find_by( cart_id: self.id, product_id: product_id )
       # binding.pry
-    else
-     cart_item.destroy
+
+      if cart_item.quantity > 1
+        cart_item.quantity -= 1
+        cart_item.save
+        # binding.pry
+      else
+       cart_item.destroy
+      end
     end
   end
 
   def clear_cart
-    self.cart_items.destroy_all
+    if self.user_id
+      self.cart_items.destroy_all
+    end
   end
 
   def checkout_clear
-    cart_items = CartItem.where( cart_id: self.id, quantity: 0 )
-    cart_items.destroy_all
+    if self.user_id
+      cart_items = CartItem.where( cart_id: self.id, quantity: 0 )
+      cart_items.destroy_all
+    end
   end
 
 end
