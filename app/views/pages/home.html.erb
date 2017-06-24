@@ -1,13 +1,47 @@
 <div class="container">
-  <header>
-    <h1>Hungry for apples?</h1>
-  </header>
-  <div>
-    <p>
-      <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat deserunt eaque velit in amet veniam officiis quaerat cupiditate, minima aut culpa dolorem aliquid beatae quibusdam facere! Earum dolore rem, accusamus!</span><br />
-      <span>Cum eius at voluptatem, ipsa animi odit quas delectus exercitationem eligendi doloremque, eveniet nesciunt officiis vitae quam sed sint. Quos minus molestiae consequatur facere quod tempore maiores, incidunt harum ad!</span>
-      <span>Facilis at expedita quia. Nihil, blanditiis, consequuntur. Pariatur veniam esse doloribus, et nisi deserunt in voluptatem, aliquid eius nam incidunt inventore, odit dolorem aperiam, dignissimos explicabo fuga. Nisi, tenetur, suscipit.</span>
-      <span>Ad, ea ratione! Veniam repudiandae consectetur, dicta nulla, fuga quibusdam dignissimos maxime officia pariatur laboriosam, repellendus incidunt sed voluptas sint. In inventore sunt quisquam temporibus assumenda qui, illo ut unde.</span>
-    </p>
+  <div id="mainLanding" class="splashImage">
+    <div class="darkOverlay">
+      HUNGRY FOR APPLES?
+    </div>
   </div>
+
+  <div class="acctWrap">
+    <% if @current_user.nil? %>
+      <div class="signUpButton main">
+        Sign up
+      </div>
+    <% else %>
+
+    <% end %>
+</div>
+
+  <div id="accountLand" class="splashImage">
+  </div>
+
+  <div class="acctWrap">
+
+</div>
+
+  <div id="awardBox" class="splashImage">
+    <div class="darkOverlay">
+      <%= image_tag "splashes/Young_Artist_Award.jpg" %>
+      <p>
+        <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum porro, distinctio sit eos similique, eligendi dolorem aspernatur veniam dignissimos, provident at eaque? Rerum, doloremque soluta exercitationem recusandae! Sunt, culpa non.</span>
+        <span>Est labore et, facilis quidem ipsa ratione inventore consequatur accusantium repellat delectus minus numquam voluptatem reiciendis vero nemo consectetur culpa exercitationem, ipsam. Error incidunt laborum velit reiciendis minima numquam facilis!</span>
+        <span>Labore veritatis sunt unde sit officia id adipisci inventore tempora modi reiciendis corporis nulla repudiandae dolore, voluptas atque ducimus explicabo quidem voluptatibus facilis corrupti. In soluta voluptate debitis officia odit?</span>
+      </p>
+      <!-- <img src="" alt=""> -->
+    </div>
+  </div>
+
+  <script>
+  var $body = $('body');
+  var $splashImage = $('.splashImage');
+  $(window).on('scroll', function () {
+    var scrollTop = $(window).scrollTop();
+    $body.css('background-position-y', -scrollTop / 0.5); // Entire background
+    $splashImage.css('background-position-y', -scrollTop * 0.2); // Just Bill
+  });
+  </script>
+
 </div>

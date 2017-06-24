@@ -16,21 +16,21 @@ u1 = User.create( {
   admin: true
  } )
 
-u2 = User.create( {
-  name: 'John',
-  email: 'john@apple.com',
-  password: 'chicken',
-  password_confirmation: 'chicken',
-  admin: false
- } )
+# u2 = User.create( {
+#   name: 'John',
+#   email: 'john@apple.com',
+#   password: 'chicken',
+#   password_confirmation: 'chicken',
+#   admin: false
+#  } )
 
- u3 = User.create( {
-   name: 'Sarah',
-   email: 'Sarah@apple.com',
-   password: 'chicken',
-   password_confirmation: 'chicken',
-   admin: false
-  } )
+#  u3 = User.create( {
+#    name: 'Sarah',
+#    email: 'Sarah@apple.com',
+#    password: 'chicken',
+#    password_confirmation: 'chicken',
+#    admin: false
+#   } )
 
 #--------------------------------------------------------------------
 

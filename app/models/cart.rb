@@ -8,7 +8,7 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #
-
+require 'pry'
 class Cart < ApplicationRecord
   belongs_to :user
   has_many :cart_items, dependent: :destroy
@@ -18,8 +18,10 @@ class Cart < ApplicationRecord
     if CartItem.where( cart_id: self.id, product_id: product_id ).exists?
       cart_item = CartItem.find_by( cart_id: self.id, product_id: product_id )
       cart_item.quantity += 1
+      # binding.pry
       cart_item.save
     else
+      # binding.pry
       CartItem.create({
         cart_id: self.id,
         product_id: product_id,
@@ -30,9 +32,10 @@ class Cart < ApplicationRecord
 
   def remove_item product_id
     cart_item = CartItem.find_by( cart_id: self.id, product_id: product_id )
-    if cart_item.quantity > 0 
+    if cart_item.quantity > 1 
       cart_item.quantity -= 1 
       cart_item.save
+      # binding.pry
     else
      cart_item.destroy
     end

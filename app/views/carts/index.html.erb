@@ -1,12 +1,13 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <p id="notice"><%= notice %></p>
 
 <h1>Carts</h1>
 
 <table>
   <thead>
     <tr>
-      <th>User</th>
       <th>Completed</th>
+      <th>Items</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -14,8 +15,8 @@
   <tbody>
     <% @carts.each do |cart| %>
       <tr>
-        <td><%= cart.user_id %></td>
         <td><%= cart.purchase_completed %></td>
+        <td><%= cart.cart_items.count %></td>
         <td><%= link_to 'Show', cart %></td>
         <td><%= link_to 'Edit', edit_cart_path(cart) %></td>
         <td><%= link_to 'Destroy', cart, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -27,3 +28,5 @@
 <br>
 
 <%= link_to 'New Cart', new_cart_path %>
+
+</div>

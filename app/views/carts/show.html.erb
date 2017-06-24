@@ -1,3 +1,7 @@
 <p id="notice"><%= notice %></p>
 
-<%= render 'contents', cart: @cart %>
+<% if @current_user != @cart.user %>
+  <%= render 'non_editable_contents', cart: @cart %>
+<% else %>
+  <%= render 'contents', cart: @cart %>
+<% end %>

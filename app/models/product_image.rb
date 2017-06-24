@@ -13,9 +13,7 @@
 
 class ProductImage < ApplicationRecord
   belongs_to :product
-
   after_destroy :delete_cloudinary_image
-
   def delete_cloudinary_image
       Cloudinary::Uploader.destroy( self.public_id ) # Destroy image hosted on Cloudinary.
   end

@@ -14,6 +14,12 @@ Rails.application.routes.draw do
 
   root 'pages#home'
 
+  get 'carts/clear' => 'carts#clear_cart', as: :clear
+  get 'carts/add_item/:id' => 'carts#add_item', as: :add
+  get 'carts/remove_item/:id' => 'carts#remove_item', as: :remove
+  delete 'carts/delete_item/:id' => 'carts#destroy_cart_item', as: :delete
+
+
   resources :products, :carts, :users, :cart_items
 
   # get '/cart_item' => 'cart_items#new'
@@ -21,10 +27,7 @@ Rails.application.routes.draw do
   # post '/cart_item/:id' => 'cart_items#update'
   # delete '/cart_item/:id' => 'cart_items#destroy'
 
-  get 'carts/add_item/:id' => 'carts#add_item', as: :add
-  get 'carts/remove_item/:id' => 'carts#remove_item', as: :remove
-  get 'carts/clear' => 'carts#clear_cart', as: :clear
-
+  get '/signup' => 'users#new', as: 'signup'
   get 'cart' => 'cart#show'
   get '/login' => 'session#new'
   post '/login' => 'session#create'

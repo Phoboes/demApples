@@ -22,9 +22,9 @@ ActiveRecord::Schema.define(version: 20170223005804) do
 
   create_table "carts", force: :cascade do |t|
     t.integer  "user_id"
-    t.boolean  "purchase_completed"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.boolean  "purchase_completed", default: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   create_table "categories", force: :cascade do |t|

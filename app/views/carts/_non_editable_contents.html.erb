@@ -1,0 +1,11 @@
+<div class="container">
+<% @cart.cart_items.each do |item| %>
+<div class="cartRow">
+  <p>Item: <%= item.product.name %></p> |
+  <p>Quantity: <%= item.quantity %></p>
+  <p>Price: <%= number_to_currency ( item.product.price )*item.quantity %></p> 
+
+</div>
+<% end %>
+
+</div>

@@ -1,5 +1,8 @@
 class CartsController < ApplicationController
-  before_action :set_cart, only: [:show, :edit, :update, :destroy, :add_item, :remove_item, :clear_cart]
+  before_action :set_cart, only: [ :add_item, :remove_item, :clear_cart]
+  # before_action :verify_owner, only: [ :edit, :add_item, :remove_item, :clear_cart ]
+
+
 
   # GET /carts
   # GET /carts.json
@@ -10,10 +13,19 @@ class CartsController < ApplicationController
   # GET /carts/1
   # GET /carts/1.json
   def show
+    @cart = Cart.find( params["id"] )
+    # raise
+
+    respond_to :html, :json
+
+
   end
 
   # GET /carts/new
   def new
+    if @current_user.nil?
+      redirect_to login_path
+    end
     @cart = Cart.new
   end
 
@@ -54,6 +66,7 @@ class CartsController < ApplicationController
   # DELETE /carts/1
   # DELETE /carts/1.json
   def destroy
+    @cart = Cart.find( params["id"] )
     @cart.destroy
     respond_to do |format|
       format.html { redirect_to carts_url, notice: 'Cart was successfully destroyed.' }
@@ -61,33 +74,60 @@ class CartsController < ApplicationController
     end
   end
 
-    def remove_item
-      @item = CartItem.find( params[:id] )
-      @cart.remove_item @item.product.id
-      render 'show', cart: @cart
+
+  def destroy_cart_item
+    cart_item = CartItem.find( params["id"] )
+    cart_item.destroy
+    flash[:success] = "Item successfully deleted from cart."
+  end
+
+  def remove_item
+    item = CartItem.find_by( cart_id: @cart.id, product_id: params["id"] )
+    @cart.remove_item item.product.id
+    render 'show', cart: @cart
+  end
+
+  def add_item
+    # If the user's last cart has completed all transactions, make a new one.
+    if !@current_user.carts.last.purchase_completed && @current_user.carts.last.present?
+      cart = @current_user.carts.last
+    else
+      cart = Cart.create({ user_id: @current_user.id, purchase_completed: false })
     end
 
-    def add_item
-      @item = CartItem.find( params[:id] )
-      @cart.add_item @item.product.id
-      render 'show', cart: @cart
+    if CartItem.find_by( cart_id: cart.id, product_id: params["id"] )
+      item = CartItem.find_by( cart_id: cart.id, product_id: params["id"] )
+      cart.add_item item.product.id
+    else
+      item = CartItem.create( cart_id: cart.id, product_id: params["id"], quantity: 1 )
     end
 
-    def clear_cart
-      @cart.clear_cart
-      render 'show', cart: @cart
-    end
+    render 'show', cart: @cart
+  end
+
+  def clear_cart
+    @cart.clear_cart
+    render 'show', cart: @cart
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_cart
       if @current_user.nil?
         redirect_to login_path
-      elsif @current_user.carts.nil? || @current_user.carts.last.purchase_completed
+      elsif @current_user.carts.nil?
         @cart = Cart.create( user_id: @current_user.id )
-        redirect_to cart_path( @cart )
+      elsif @current_user.carts.where( purchase_completed: false ).empty?
+        @cart = Cart.create( user_id: @current_user.id )
       else
-        @cart = @current_user.carts.last
+        @cart = @current_user.carts.find_by( purchase_completed: false )
+      end
+      # redirect_to cart_path( @cart )
+    end
+
+    def verify_owner
+      if !@current_user || cart.find( params[:id] ).user != @current_user
+        redirect_to :back
       end
     end
 

@@ -9,7 +9,7 @@ namespace :noko do
   p '---------------------------------------------------'
 
     # kill all old apples from previous rake tasks
-    previously_scraped_products = Product.joins(:categories).where(categories: {name: "scraped"})
+    previously_scraped_products = Product.joins(:categories).where(categories: {name: "scraped"}) 
     p "Currently deleting " + previously_scraped_products.count.to_s + " old records. Stand by."
     previously_scraped_products.destroy_all
 

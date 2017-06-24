@@ -4,7 +4,11 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    if @current_user.admin
+      @users = User.all
+    else
+      render :back
+    end
   end
 
   # GET /users/1
@@ -45,8 +49,11 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(user_params) &&
+      @user.authenticate(params["user"]["password"]) &&
+       params["user"]["password"] == params["user"]["password_confirmation"]
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
