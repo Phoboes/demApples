@@ -110,6 +110,13 @@ p3.categories << c1
   })
 
   i2 = ProductImage.create({
+    product_id: p1.id,
+    public_id: "gotApples/null",
+    image_url: "apple_seeds/fresh_gs.jpg",
+    attr_desc: "A Granny Smith apple that has been sliced open."
+  })
+
+  i2 = ProductImage.create({
     product_id: p2.id,
     public_id: "gotApples/null",
     image_url: "apple_seeds/100721_apple1.jpg",
