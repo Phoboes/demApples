@@ -43,6 +43,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'pry'
   gem 'annotate'
+  gem 'rspec-rails'
 end
 
 group :development do

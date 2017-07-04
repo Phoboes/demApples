@@ -9,3 +9,11 @@
     display: inline-block;
   }
 }
+
+// Violently killing off Materialize's default styles.
+.cartQuantity {
+  width: 6% !important;
+  border: 1px solid gainsboro !important;
+  height: 100% !important;
+  text-align: center;
+}

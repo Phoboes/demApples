@@ -1,37 +1,30 @@
 Rails.application.routes.draw do
 
-  get 'product_images/new'
-
-  get 'product_images/create'
-
-  get 'product_images/edit'
-
-  get 'product_images/update'
-
-  get 'product_images/destroy'
-
-  get 'sessions/new'
-
   root 'pages#home'
+  resources :products, :users, :cart_items, :charges
+  resources :carts, only: [ :index, :show, :destroy ]
 
-  get 'carts/clear' => 'carts#clear_cart', as: :clear
-  post 'carts/add_item/:id' => 'carts#add_item', as: :add
-  post 'carts/remove_item/:id' => 'carts#remove_item', as: :remove
-  delete 'carts/delete_item/:id' => 'carts#destroy_cart_item', as: :delete_item
-  get '/carts/payment/:id' => 'charges#new', as: :payment
-
-
-  resources :products, :carts, :users, :cart_items, :charges
-
-  # get '/cart_item' => 'cart_items#new'
-  # post '/cart_item' => 'cart_items#create'
-  # post '/cart_item/:id' => 'cart_items#update'
-  # delete '/cart_item/:id' => 'cart_items#destroy'
-
-  get '/signup' => 'users#new', as: 'signup'
-  get 'cart' => 'cart#show'
+  # Session routes
+  get 'sessions/new'
   get '/login' => 'session#new'
   post '/login' => 'session#create'
   delete '/login' => 'session#destroy'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get '/signup' => 'users#new', as: 'signup'
+
+  get 'product_images/new'
+  get 'product_images/create'
+  get 'product_images/edit'
+  get 'product_images/update'
+  get 'product_images/destroy'
+
+  # Cart item methods.
+  get 'carts/clear' => 'carts#clear_cart', as: :clear
+  post 'carts/add_item/:id' => 'carts#add_item', as: :add
+  post 'carts/remove_item/:id' => 'carts#remove_item', as: :remove
+  post 'carts/set_item/:id' => 'carts#set_item_quantity', as: :set
+  delete 'carts/delete_item/:id' => 'carts#destroy_cart_item', as: :delete_item
+
+  # Stripe
+  get '/carts/payment/:id' => 'charges#new', as: :payment
+
 end

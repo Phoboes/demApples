@@ -7,7 +7,8 @@ class CartsController < ApplicationController
   # GET /carts
   # GET /carts.json
   def index
-    @carts = Cart.all
+    @incomplete_carts = Cart.where( purchase_completed: false )
+    @completed_carts = Cart.where( purchase_completed: true )
   end
 
   # GET /carts/1
@@ -74,6 +75,15 @@ class CartsController < ApplicationController
     end
   end
 
+  def set_item_quantity
+    @cart_item = CartItem.find( params["id"] )
+    if params["quantity"].to_i == 0
+      @cart_item.destroy
+    else
+      @cart_item.quantity = params["quantity"]
+      @cart_item.save
+    end
+  end
 
   def destroy_cart_item
     cart_item = CartItem.find( params["id"] )
@@ -87,26 +97,6 @@ class CartsController < ApplicationController
     @cart.remove_item item.product.id
     # render 'show', cart: @cart
   end
-
-  # def add_item
-  #   # If the user's last cart has completed all transactions, make a new one.
-  #   binding.pry
-  #
-  #   if !@current_user.carts.last.purchase_completed && @current_user.carts.last.present?
-  #     cart = @current_user.carts.last
-  #   else
-  #     cart = Cart.create({ user_id: @current_user.id, purchase_completed: false })
-  #   end
-  #
-  #   if CartItem.find_by( cart_id: cart.id, product_id: params["id"] )
-  #     item = CartItem.find_by( cart_id: cart.id, product_id: params["id"] )
-  #     cart.add_item item.product.id
-  #   else
-  #     item = CartItem.create( cart_id: cart.id, product_id: params["id"], quantity: 1 )
-  #   end
-  #
-  #   render 'show', cart: @cart
-  # end
 
 
   def add_item
